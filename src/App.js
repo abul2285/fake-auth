@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import { fetchProfile, login, logout } from './libs/users';
 import './App.css';
 
 function App() {
+  const [isAuth, setIsAuth] = useState();
+  useEffect(() => {
+    fetchProfile().then(({ username }) => {
+      setIsAuth(!!username);
+    });
+  }, [isAuth]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      {isAuth ? 'Authenticated' : 'Not Authenticated'}
+
+      {isAuth ? (
+        <button onClick={() => logout(setIsAuth)}>Logout</button>
+      ) : (
+        <button onClick={() => login(setIsAuth)}>Login</button>
+      )}
     </div>
   );
 }
